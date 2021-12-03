@@ -6,7 +6,6 @@ import ma.octo.assignement.repository.CompteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -41,12 +40,7 @@ public class CompteService {
 
     public List<Compte> loadAllCompte() {
         List<Compte> all = compteRepository.findAll();
-
-        if (all.isEmpty()) {
-            return Collections.emptyList();
-        } else {
-            return all;
-        }
+        return all;
     }
 
     public Compte addCompte(Compte compte) {

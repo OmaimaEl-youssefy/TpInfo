@@ -5,7 +5,6 @@ import ma.octo.assignement.repository.UtilisateurRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -19,13 +18,7 @@ public class UtilisateurService {
     }
 
     public List<Utilisateur> loadAllUtilisateur() {
-        List<Utilisateur> all = utilisateurRepository.findAll();
-
-        if (all.isEmpty()) {
-            return Collections.emptyList();
-        } else {
-            return all;
-        }
+        return utilisateurRepository.findAll();
     }
 
     public Utilisateur addUtilisateur(Utilisateur utilisateur) {
