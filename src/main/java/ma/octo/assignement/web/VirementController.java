@@ -7,7 +7,6 @@ import ma.octo.assignement.exceptions.SoldeDisponibleInsuffisantException;
 import ma.octo.assignement.exceptions.TransactionException;
 import ma.octo.assignement.exceptions.VirementNonExistantException;
 import ma.octo.assignement.mapper.VirementMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,6 @@ class VirementController {
 
     private final VirementService virementService;
 
-    @Autowired
     VirementController(VirementService virementService) {
         this.virementService = virementService;
     }

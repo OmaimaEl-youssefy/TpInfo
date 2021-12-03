@@ -5,7 +5,7 @@ import ma.octo.assignement.dto.UtilisateurDto;
 
 public class UtilisateurMapper {
 
-    public static UtilisateurDto map(Utilisateur utilisateur) {
+    private static UtilisateurDto map(Utilisateur utilisateur) {
 
         UtilisateurDto utilisateurDto = new UtilisateurDto();
         utilisateurDto.setComptes(utilisateur.getComptes());

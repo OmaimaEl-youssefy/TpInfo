@@ -3,7 +3,6 @@ package ma.octo.assignement.service;
 import ma.octo.assignement.domain.Compte;
 import ma.octo.assignement.exceptions.CompteNonExistantException;
 import ma.octo.assignement.repository.CompteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +16,10 @@ public class CompteService {
 
     private final CompteRepository compteRepository;
 
-    @Autowired
     public CompteService(CompteRepository compteRepository) {
         this.compteRepository = compteRepository;
     }
 
-    //finished
     public Compte getCompte(String nrCompte) throws CompteNonExistantException {
 
         Compte compte = compteRepository.findByNrCompte(nrCompte);
@@ -31,7 +28,6 @@ public class CompteService {
         }
         return compte;
     }
-
 
     public Compte getCompteByRib(String rib) throws CompteNonExistantException {
         Compte compte = compteRepository.findByRib(rib);
@@ -42,7 +38,7 @@ public class CompteService {
         return compte;
     }
 
-    //finished
+
     public List<Compte> loadAllCompte() {
         List<Compte> all = compteRepository.findAll();
 

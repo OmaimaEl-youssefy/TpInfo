@@ -25,8 +25,8 @@ import java.util.List;
 @Transactional
 public class VirementService {
 
-    public static final int MONTANT_MAXIMAL = 10000;
-    public static final int MONTANT_MINIMAL = 10;
+    public static final BigDecimal MONTANT_MAXIMAL = BigDecimal.valueOf(10000);
+    public static final BigDecimal MONTANT_MINIMAL = BigDecimal.valueOf(10);
 
     private final VirementRepository virementRepository;
     private final CompteService compteService;
@@ -52,9 +52,9 @@ public class VirementService {
 
     public Virement createTransaction(VirementDto virementDto) throws TransactionException, CompteNonExistantException, SoldeDisponibleInsuffisantException {
 
-
         Compte compteEmetteur = compteService.getCompte(virementDto.getNrCompteEmetteur());
         Compte compteBeneficiaire = compteService.getCompte(virementDto.getNrCompteBeneficiaire());
+
 
         if (compteEmetteur == null || compteBeneficiaire == null) {
             log.error("Compte Non existant");
@@ -64,20 +64,20 @@ public class VirementService {
         if (virementDto.getMontantVirement() == null || virementDto.getMontantVirement().doubleValue() == 0) {
             log.error("Montant vide");
             throw new TransactionException("Montant vide");
-        } else if (virementDto.getMontantVirement().doubleValue() < MONTANT_MINIMAL) {
+        } else if (virementDto.getMontantVirement().compareTo( MONTANT_MINIMAL ) < 0 ) {
             log.error("Montant minimal de virement non atteint");
             throw new TransactionException("Montant minimal de virement non atteint");
-        } else if (virementDto.getMontantVirement().doubleValue() > MONTANT_MAXIMAL) {
+        } else if (virementDto.getMontantVirement().compareTo(MONTANT_MAXIMAL) > 0) {
             log.error("Montant maximal de virement dépassé");
             throw new TransactionException("Montant maximal de virement dépassé");
         }
 
-        if (virementDto.getMotifVirement().length() == 0 || virementDto.getMotifVirement().isEmpty()) {
+        if (virementDto.getMotifVirement().length() == 0 ) {
             log.error("Motif vide");
             throw new TransactionException("Motif vide");
         }
 
-        if (compteEmetteur.getSolde().compareTo(virementDto.getMontantVirement()) == -1) {
+        if (compteEmetteur.getSolde().compareTo(virementDto.getMontantVirement()) < 0 ) {
             log.error("Solde insuffisant pour l'utilisateur");
             throw new SoldeDisponibleInsuffisantException("Solde insuffisant pour l'utilisateur");
         }

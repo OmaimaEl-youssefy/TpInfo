@@ -1,7 +1,6 @@
 package ma.octo.assignement.repository;
 
 import ma.octo.assignement.domain.Versement;
-import ma.octo.assignement.domain.Virement;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,7 @@ class VersementRepositoryTest {
     void findOne() {
 
         Versement versement = new Versement();
+
         versement.setMontantVersement(BigDecimal.TEN);
         versement.setDateExecution(new Date());
         versement.setMotifVersement("motif");
@@ -72,11 +72,13 @@ class VersementRepositoryTest {
         Versement versement = new Versement();
         versement.setMontantVersement(BigDecimal.TEN);
         versement.setDateExecution(new Date());
-        versement.setMotifVersement("Test case");
+        versement.setMotifVersement("motif");
+
         versementRepository.save(versement);
+
         versementRepository.delete(versement);
-        var deletedVersement = versementRepository.findById(5L).orElse(null);
-        assertThat(deletedVersement).isNull();
+
+        assertThat(versementRepository.findById(5L).orElse(null)).isNull();
     }
 
 }

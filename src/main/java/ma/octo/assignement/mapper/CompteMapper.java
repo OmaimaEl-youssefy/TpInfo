@@ -5,7 +5,7 @@ import ma.octo.assignement.dto.CompteDto;
 
 public class CompteMapper {
 
-    public static CompteDto map(Compte compte) {
+    private static CompteDto map(Compte compte) {
 
         CompteDto compteDto = new CompteDto();
         compteDto.setRib(compte.getRib());
@@ -19,4 +19,5 @@ public class CompteMapper {
     public static CompteDto convertToDto(Compte compte) {
         return CompteMapper.map(compte);
     }
+
 }

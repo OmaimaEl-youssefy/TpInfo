@@ -10,4 +10,5 @@ public class CompteNonExistantException extends Exception {
     public CompteNonExistantException(String message) {
         super(message);
     }
+
 }

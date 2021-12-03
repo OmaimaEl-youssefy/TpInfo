@@ -29,6 +29,7 @@ class VirementRepositoryTest {
         virement.setMontantVirement(BigDecimal.TEN);
         virement.setDateExecution(new Date());
         virement.setMotifVirement("motif");
+
         virementRepository.save(virement);
 
         Virement newVirement = virementRepository.findById(5L).orElse(null);
@@ -44,7 +45,7 @@ class VirementRepositoryTest {
 
         virement.setMontantVirement(BigDecimal.TEN);
         virement.setDateExecution(new Date());
-        virement.setMotifVirement("Test case");
+        virement.setMotifVirement("motif");
 
         virementRepository.save(virement);
 
@@ -58,12 +59,13 @@ class VirementRepositoryTest {
         Virement virement = new Virement();
         virement.setMontantVirement(BigDecimal.TEN);
         virement.setDateExecution(new Date());
-        virement.setMotifVirement("Motif save");
+        virement.setMotifVirement("motif");
 
         virementRepository.save(virement);
 
         assertThat(virement).isNotNull();
         assertThat(virement.getId()).isPositive();
+
     }
 
     @Test
@@ -71,10 +73,12 @@ class VirementRepositoryTest {
         Virement virement = new Virement();
         virement.setMontantVirement(BigDecimal.TEN);
         virement.setDateExecution(new Date());
-        virement.setMotifVirement("Test case");
+        virement.setMotifVirement("motif");
+
         virementRepository.save(virement);
+
         virementRepository.delete(virement);
-        var deletedVirement = virementRepository.findById(5L).orElse(null);
-        assertThat(deletedVirement).isNull();
+
+        assertThat(virementRepository.findById(5L).orElse(null)).isNull();
     }
 }

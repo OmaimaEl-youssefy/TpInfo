@@ -40,12 +40,4 @@ public class VirementMapper {
         return virement;
     }
 
-    public static VirementDto convertToDto(Virement virement) {
-        return VirementMapper.mapToDto(virement);
-    }
-
-    public static Virement convertToEntity(VirementDto virementDto) {
-        return VirementMapper.mapToEntity(virementDto);
-    }
-
 }

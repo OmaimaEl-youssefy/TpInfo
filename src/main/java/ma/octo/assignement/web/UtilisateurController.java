@@ -3,7 +3,6 @@ package ma.octo.assignement.web;
 import ma.octo.assignement.domain.Utilisateur;
 import ma.octo.assignement.dto.UtilisateurDto;
 import ma.octo.assignement.mapper.UtilisateurMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +19,6 @@ public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;
 
-    @Autowired
     public UtilisateurController(UtilisateurService utilisateurService) {
         this.utilisateurService = utilisateurService;
     }

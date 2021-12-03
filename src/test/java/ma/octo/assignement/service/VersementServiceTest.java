@@ -51,11 +51,6 @@ class VersementServiceTest {
 
     private final Date currentDate = new Date();
 
-    @BeforeEach
-    void setUp() {
-        versementService = new VersementService(versementRepository, auditTransactionService, compteService, compteRepository);
-    }
-
 
     @Test
     @DisplayName("get all versements elements")

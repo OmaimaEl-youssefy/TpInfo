@@ -36,8 +36,5 @@ public class VersementMapper {
         return VersementMapper.mapToDto(versement);
     }
 
-    public static Versement convertToEntity(VersementDto versementDto) {
-        return VersementMapper.mapToEntity(versementDto);
-    }
 
 }

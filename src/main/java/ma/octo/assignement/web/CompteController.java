@@ -3,7 +3,6 @@ package ma.octo.assignement.web;
 import ma.octo.assignement.domain.Compte;
 import ma.octo.assignement.dto.CompteDto;
 import ma.octo.assignement.mapper.CompteMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +19,6 @@ public class CompteController {
 
     private final CompteService compteService;
 
-    @Autowired
     public CompteController(CompteService compteService) {
         this.compteService = compteService;
     }

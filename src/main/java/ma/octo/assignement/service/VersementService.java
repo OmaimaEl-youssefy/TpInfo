@@ -10,7 +10,6 @@ import ma.octo.assignement.exceptions.VersementNonExistantException;
 import ma.octo.assignement.mapper.VersementMapper;
 import ma.octo.assignement.repository.CompteRepository;
 import ma.octo.assignement.repository.VersementRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +22,8 @@ import java.util.List;
 @Slf4j
 public class VersementService {
 
-    public static final int MONTANT_MAXIMAL = 10000;
-    public static final int MONTANT_MINIMAL = 0;
+    public static final BigDecimal MONTANT_MAXIMAL = BigDecimal.valueOf(10000);
+    public static final BigDecimal MONTANT_MINIMAL =BigDecimal.ZERO;
 
     private final VersementRepository versementRepository;
 
@@ -34,14 +33,12 @@ public class VersementService {
 
     private final CompteRepository compteRepository;
 
-    @Autowired
     public VersementService(VersementRepository versementRepository, AuditTransactionService monservice, CompteService compteService, CompteRepository compteRepository) {
         this.versementRepository = versementRepository;
         this.monservice = monservice;
         this.compteService = compteService;
         this.compteRepository = compteRepository;
     }
-
 
     public List<Versement> loadAll() {
         return versementRepository.findAll();
@@ -59,15 +56,15 @@ public class VersementService {
         if (versementDto.getMontantVersement() == null || versementDto.getMontantVersement().doubleValue() == 0) {
             log.error("Montant vide");
             throw new TransactionException("Montant vide");
-        } else if (versementDto.getMontantVersement().doubleValue() < MONTANT_MINIMAL) {
+        } else if (versementDto.getMontantVersement().compareTo(MONTANT_MINIMAL) < 0 ) {
             log.error("Montant minimal de versement non atteint");
             throw new TransactionException("Montant minimal de versement non atteint");
-        } else if (versementDto.getMontantVersement().doubleValue() > MONTANT_MAXIMAL) {
+        } else if (versementDto.getMontantVersement().compareTo(MONTANT_MAXIMAL) > 0 ) {
             log.error("Montant maximal de versement dépassé");
             throw new TransactionException("Montant maximal de versement dépassé");
         }
 
-        if (versementDto.getMotifVersement().length() == 0 || versementDto.getMotifVersement().isEmpty()) {
+        if (versementDto.getMotifVersement().length() == 0 ) {
             log.error("Motif vide");
             throw new TransactionException("Motif vide");
         }
@@ -87,7 +84,7 @@ public class VersementService {
 
         versementRepository.save(versement);
 
-        monservice.auditVirement("Versement depuis " + versement.getNomPrenomEmetteur() + " vers " + versement
+        monservice.auditVersement("Versement depuis " + versement.getNomPrenomEmetteur() + " vers " + versement
                 .getCompteBeneficiaire() + " d'un montant de " + versement.getMontantVersement()
                 .toString());
 
@@ -97,6 +94,4 @@ public class VersementService {
     public Versement getVersement(Long id) throws VersementNonExistantException {
         return versementRepository.findById(id).orElseThrow(() -> new VersementNonExistantException("Le versement n'existe pas"));
     }
-
-
 }

@@ -7,7 +7,6 @@ import ma.octo.assignement.exceptions.TransactionException;
 import ma.octo.assignement.exceptions.VersementNonExistantException;
 import ma.octo.assignement.mapper.VersementMapper;
 import ma.octo.assignement.service.VersementService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,6 @@ public class VersementController {
 
     private final VersementService versementService;
 
-    @Autowired
     public VersementController(VersementService versementService) {
         this.versementService = versementService;
     }

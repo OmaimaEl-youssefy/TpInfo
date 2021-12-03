@@ -5,7 +5,6 @@ import ma.octo.assignement.domain.util.EventType;
 import ma.octo.assignement.repository.AuditTransactionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,7 +17,6 @@ public class AuditTransactionService {
 
     private final AuditTransactionRepository auditVirementRepository;
 
-    @Autowired
     public AuditTransactionService(AuditTransactionRepository auditVirementRepository) {
         this.auditVirementRepository = auditVirementRepository;
     }

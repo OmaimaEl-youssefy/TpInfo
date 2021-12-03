@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Compte {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
