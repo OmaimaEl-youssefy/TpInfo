@@ -4,21 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ma.octo.assignement.domain.Utilisateur;
 
 import java.math.BigDecimal;
-import java.util.Date;
+
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VirementDto {
+public class CompteDto {
 
     private Long id;
-    private String nrCompteEmetteur;
-    private String nrCompteBeneficiaire;
-    private String motifVirement;
-    private BigDecimal montantVirement;
-    private Date dateExecution;
+    private String nrCompte;
+    private String rib;
+    private BigDecimal solde;
+    private Utilisateur utilisateur;
 
 }

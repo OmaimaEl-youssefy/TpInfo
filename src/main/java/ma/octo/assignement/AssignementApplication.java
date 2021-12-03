@@ -10,22 +10,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @SpringBootApplication
-public class AssignementApplication implements CommandLineRunner {
+public class AssignementApplication implements CommandLineRunner{
+
+	 private final CompteRepository compteRepository;
+
+	private final UtilisateurRepository utilisateurRepository;
+
+	private final VirementRepository virementRepository;
+
 	@Autowired
-	private CompteRepository compteRepository;
-	@Autowired
-	private UtilisateurRepository utilisateurRepository;
-	@Autowired
-	private VirementRepository virementRepository;
+	public AssignementApplication(CompteRepository compteRepository, UtilisateurRepository utilisateurRepository, VirementRepository virementRepository) {
+		this.compteRepository = compteRepository;
+		this.utilisateurRepository = utilisateurRepository;
+		this.virementRepository = virementRepository;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(AssignementApplication.class, args);
 	}
+
 
 	@Override
 	public void run(String... strings) throws Exception {
@@ -69,6 +78,7 @@ public class AssignementApplication implements CommandLineRunner {
 		v.setDateExecution(new Date());
 		v.setMotifVirement("Assignment 2021");
 
-		virementRepository.save(v);
+		//virementRepository.save(v);
 	}
+
 }

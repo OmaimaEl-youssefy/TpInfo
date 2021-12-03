@@ -1,64 +1,45 @@
 package ma.octo.assignement.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "COMPTE")
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Compte {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-  @Column(length = 16, unique = true)
-  private String nrCompte;
+    @Column(length = 16, unique = true)
+    private String nrCompte;
 
-  private String rib;
+    @Column(nullable = false, unique = true)
+    private String rib;
 
-  @Column(precision = 16, scale = 2)
-  private BigDecimal solde;
+    @Column(precision = 16, scale = 2)
+    private BigDecimal solde;
 
-  @ManyToOne()
-  @JoinColumn(name = "utilisateur_id")
-  private Utilisateur utilisateur;
+    @ManyToOne
+    @JoinColumn(name = "utilisateur_id")
+    private Utilisateur utilisateur;
 
-  public String getNrCompte() {
-    return nrCompte;
-  }
+    @OneToMany(mappedBy = "compteBeneficiaire")
+    private List<Versement> versementsCompteEmetteur;
 
-  public void setNrCompte(String nrCompte) {
-    this.nrCompte = nrCompte;
-  }
+    @OneToMany(mappedBy = "compteEmetteur")
+    private List<Virement> virementsCompteEmetteur;
 
-  public String getRib() {
-    return rib;
-  }
+    @OneToMany(mappedBy = "compteBeneficiaire")
+    private List<Virement> virementscompteBeneficiaire;
 
-  public void setRib(String rib) {
-    this.rib = rib;
-  }
-
-  public BigDecimal getSolde() {
-    return solde;
-  }
-
-  public void setSolde(BigDecimal solde) {
-    this.solde = solde;
-  }
-
-  public Utilisateur getUtilisateur() {
-    return utilisateur;
-  }
-
-  public void setUtilisateur(Utilisateur utilisateur) {
-    this.utilisateur = utilisateur;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 }

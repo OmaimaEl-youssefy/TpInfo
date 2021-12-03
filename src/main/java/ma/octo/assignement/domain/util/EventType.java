@@ -2,20 +2,17 @@ package ma.octo.assignement.domain.util;
 
 public enum EventType {
 
-  VIREMENT("virement"),
-  VERSEMENT("Versement d'argent");
+    VIREMENT("virement"),
+    VERSEMENT("Versement d'argent");
 
-  private String type;
+    private final String type;
 
-  EventType(String type) {
-    this.type = type;
-  }
+    EventType(final String type) {
+        this.type = type;
+    }
 
-  public String getType() {
-    return type;
-  }
+    public String getType() {
+        return type;
+    }
 
-  public void setType(String type) {
-    this.type = type;
-  }
 }

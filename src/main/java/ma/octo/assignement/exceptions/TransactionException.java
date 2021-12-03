@@ -2,12 +2,12 @@ package ma.octo.assignement.exceptions;
 
 public class TransactionException extends Exception {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  public TransactionException() {
-  }
+    public TransactionException() {
+    }
 
-  public TransactionException(String message) {
-    super(message);
-  }
+    public TransactionException(String message) {
+        super(message);
+    }
 }

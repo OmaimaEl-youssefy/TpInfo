@@ -1,141 +1,60 @@
 package ma.octo.assignement.web;
 
-import ma.octo.assignement.domain.Compte;
-import ma.octo.assignement.domain.Utilisateur;
 import ma.octo.assignement.domain.Virement;
 import ma.octo.assignement.dto.VirementDto;
 import ma.octo.assignement.exceptions.CompteNonExistantException;
 import ma.octo.assignement.exceptions.SoldeDisponibleInsuffisantException;
 import ma.octo.assignement.exceptions.TransactionException;
-import ma.octo.assignement.repository.CompteRepository;
-import ma.octo.assignement.repository.UtilisateurRepository;
-import ma.octo.assignement.repository.VirementRepository;
-import ma.octo.assignement.service.AutiService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ma.octo.assignement.exceptions.VirementNonExistantException;
+import ma.octo.assignement.mapper.VirementMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.CollectionUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ma.octo.assignement.service.VirementService;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@RestController(value = "/virements")
+@RestController
+@RequestMapping("/virements")
 class VirementController {
 
-    public static final int MONTANT_MAXIMAL = 10000;
-
-    Logger LOGGER = LoggerFactory.getLogger(VirementController.class);
+    private final VirementService virementService;
 
     @Autowired
-    private CompteRepository rep1;
-    @Autowired
-    private VirementRepository re2;
-    @Autowired
-    private AutiService monservice;
-    @Autowired
-    private UtilisateurRepository re3;
+    VirementController(VirementService virementService) {
+        this.virementService = virementService;
+    }
 
-    @GetMapping("lister_virements")
-    List<Virement> loadAll() {
-        List<Virement> all = re2.findAll();
+    @GetMapping("/lister-virements")
+    public ResponseEntity<List<VirementDto>> loadAll() {
+        List<Virement> all = virementService.loadAll();
 
-        if (CollectionUtils.isEmpty(all)) {
-            return null;
+        List<VirementDto> response = all.stream().map(VirementMapper::mapToDto).collect(Collectors.toList());
+
+        if (all.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return all;
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
     }
 
-    @GetMapping("lister_comptes")
-    List<Compte> loadAllCompte() {
-        List<Compte> all = rep1.findAll();
-
-        if (CollectionUtils.isEmpty(all)) {
-            return null;
-        } else {
-            return all;
-        }
-    }
-
-    @GetMapping("lister_utilisateurs")
-    List<Utilisateur> loadAllUtilisateur() {
-        List<Utilisateur> all = re3.findAll();
-
-        if (CollectionUtils.isEmpty(all)) {
-            return null;
-        } else {
-            return all;
-        }
-    }
-
-    @PostMapping("/executerVirements")
+    @PostMapping("/executer-virement")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createTransaction(@RequestBody VirementDto virementDto)
-            throws SoldeDisponibleInsuffisantException, CompteNonExistantException, TransactionException {
-        Compte c1 = rep1.findByNrCompte(virementDto.getNrCompteEmetteur());
-        Compte f12 = rep1
-                .findByNrCompte(virementDto.getNrCompteBeneficiaire());
+    public ResponseEntity<VirementDto> createTransaction(@RequestBody VirementDto virementDto)
+            throws CompteNonExistantException, TransactionException, SoldeDisponibleInsuffisantException {
 
-        if (c1 == null) {
-            System.out.println("Compte Non existant");
-            throw new CompteNonExistantException("Compte Non existant");
-        }
+        VirementDto response = VirementMapper.mapToDto(virementService.createTransaction(virementDto));
 
-        if (f12 == null) {
-            System.out.println("Compte Non existant");
-            throw new CompteNonExistantException("Compte Non existant");
-        }
-
-        if (virementDto.getMontantVirement().equals(null)) {
-            System.out.println("Montant vide");
-            throw new TransactionException("Montant vide");
-        } else if (virementDto.getMontantVirement().intValue() == 0) {
-            System.out.println("Montant vide");
-            throw new TransactionException("Montant vide");
-        } else if (virementDto.getMontantVirement().intValue() < 10) {
-            System.out.println("Montant minimal de virement non atteint");
-            throw new TransactionException("Montant minimal de virement non atteint");
-        } else if (virementDto.getMontantVirement().intValue() > MONTANT_MAXIMAL) {
-            System.out.println("Montant maximal de virement dépassé");
-            throw new TransactionException("Montant maximal de virement dépassé");
-        }
-
-        if (virementDto.getMotif().length() < 0) {
-            System.out.println("Motif vide");
-            throw new TransactionException("Motif vide");
-        }
-
-        if (c1.getSolde().intValue() - virementDto.getMontantVirement().intValue() < 0) {
-            LOGGER.error("Solde insuffisant pour l'utilisateur");
-        }
-
-        if (c1.getSolde().intValue() - virementDto.getMontantVirement().intValue() < 0) {
-            LOGGER.error("Solde insuffisant pour l'utilisateur");
-        }
-
-        c1.setSolde(c1.getSolde().subtract(virementDto.getMontantVirement()));
-        rep1.save(c1);
-
-        f12
-                .setSolde(new BigDecimal(f12.getSolde().intValue() + virementDto.getMontantVirement().intValue()));
-        rep1.save(f12);
-
-        Virement virement = new Virement();
-        virement.setDateExecution(virementDto.getDate());
-        virement.setCompteBeneficiaire(f12);
-        virement.setCompteEmetteur(c1);
-        virement.setMontantVirement(virementDto.getMontantVirement());
-
-        re2.save(virement);
-
-        monservice.auditVirement("Virement depuis " + virementDto.getNrCompteEmetteur() + " vers " + virementDto
-                        .getNrCompteBeneficiaire() + " d'un montant de " + virementDto.getMontantVirement()
-                        .toString());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    private void save(Virement Virement) {
-        re2.save(Virement);
+    @GetMapping("/get-virement/{id}")
+    public ResponseEntity<VirementDto> getVirement(@PathVariable Long id) throws VirementNonExistantException {
+        Virement virement = virementService.getVirement(id);
+        VirementDto response = VirementMapper.mapToDto(virement);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 }
