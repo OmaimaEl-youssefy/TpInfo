@@ -17,6 +17,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class Versement {
 
+    //TODO : relation avec la classe virementDto
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

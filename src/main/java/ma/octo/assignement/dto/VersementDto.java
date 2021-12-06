@@ -19,6 +19,7 @@ public class VersementDto {
     private BigDecimal montantVersement;
     private Date dateExecution;
     private String nomPrenomEmetteur;
+    //TODO : compteDto
     private Compte compteBeneficiaire;
     private String motifVersement;
 
